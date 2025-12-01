@@ -1,3 +1,5 @@
+require("dotenv").config();      // Load .env file
+
 const express = require("express");
 const mongoose = require("mongoose");
 
@@ -7,7 +9,7 @@ app.use(express.json());
 // --------------------------------------
 // MONGO CONNECTION
 // --------------------------------------
-mongoose.connect("mongodb+srv://admin1:9wFxzt5ahB9oAn7o@cluster0.si2cht3.mongodb.net/?appName=Cluster0")
+mongoose.connect(process.env.MONGO_URI)
     .then(() => console.log("MongoDB Connected"))
     .catch(err => console.error("MongoDB Error:", err));
 
