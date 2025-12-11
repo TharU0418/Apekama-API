@@ -41,7 +41,7 @@ const Holiday = mongoose.model("Holiday", HolidaySchema);
 // --------------------------------------
 const PoyaDaySchema = new mongoose.Schema({
     day: { type: String, required: true },
-
+    time: {type: String, required: true },
     poyaType: {
         type: [String],
         required: true,
@@ -55,6 +55,17 @@ const PoyaDaySchema = new mongoose.Schema({
 });
 
 const PoyaDay = mongoose.model("PoyaDay", PoyaDaySchema);
+
+
+// --------------------------------------
+// PART D SCHEMA (NEW)
+// --------------------------------------
+const PartDSchema = new mongoose.Schema({
+    day: { type: String, required: true },
+    description: { type: String, required: true }
+});
+
+const PartD = mongoose.model("PartD", PartDSchema);
 
 
 // --------------------------------------
@@ -85,7 +96,7 @@ app.get("/partbapi", async (req, res) => {
 
 
 // --------------------------------------
-// POST /partcapi  (NEW - Add Poya Day)
+// POST /partcapi  (Add Poya Day)
 // --------------------------------------
 app.post("/partcapi", async (req, res) => {
     try {
@@ -99,12 +110,39 @@ app.post("/partcapi", async (req, res) => {
 
 
 // --------------------------------------
-// GET /partcapi  (NEW - Get Poya Days)
+// GET /partcapi (Get Poya Days)
 // --------------------------------------
 app.get("/partcapi", async (req, res) => {
     try {
         const poyaDays = await PoyaDay.find();
         res.json(poyaDays);
+    } catch (err) {
+        res.status(500).json({ error: err.message });
+    }
+});
+
+
+// --------------------------------------
+// POST /partdapi  (Add Day and Description)
+// --------------------------------------
+app.post("/partdapi", async (req, res) => {
+    try {
+        const partD = new PartD(req.body);
+        await partD.save();
+        res.status(201).json({ message: "Day and Description saved", partD });
+    } catch (err) {
+        res.status(500).json({ error: err.message });
+    }
+});
+
+
+// --------------------------------------
+// GET /partdapi (Get All Day and Descriptions)
+// --------------------------------------
+app.get("/partdapi", async (req, res) => {
+    try {
+        const partDRecords = await PartD.find();
+        res.json(partDRecords);
     } catch (err) {
         res.status(500).json({ error: err.message });
     }
